@@ -10,7 +10,7 @@ Growing weary of the constant panic around COVID-19, I decided to pull some numb
 ## Sources
 
 - [Our World In Data](https://ourworldindata.org/causes-of-death)
-
+- [Novel Coronavirus (COVID-19) Cases, provided by JHU CSSE](https://github.com/CSSEGISandData/COVID-19)
 
 ## Contributions
 
