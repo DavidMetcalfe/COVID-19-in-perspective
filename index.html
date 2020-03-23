@@ -2,134 +2,181 @@
 <html>
 
 <head>
-	<title>Causes of death compared with COVID-19</title>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
-	<style>
-		canvas {
-			-moz-user-select: none;
-			-webkit-user-select: none;
-			-ms-user-select: none;
-		}
+    <title>Causes of death compared with COVID-19</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <style>
+        canvas {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
 
-		body {
-			margin-top: 35px;
-		}
+        body {
+            margin-top: 35px;
+        }
 
-		#container {
-			width: 98%;
-			margin-left: auto;
-			margin-right: auto;
-		}
-	</style>
+        #container {
+            width: 98%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .button {
+            background-color: rgb(75, 192, 137);
+            border: none;
+            color: white;
+            padding: 8px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 
 <body>
-	<div id="container">
-		<canvas id="canvas"></canvas>
-	</div>
-	<script>
+    <div id="container">
+        <canvas id="canvas"></canvas>
+    </div>
 
-		function addCommas(nStr) {
-			nStr += '';
-			x = nStr.split('.');
-			x1 = x[0];
-			x2 = x.length > 1 ? '.' + x[1] : '';
-			var rgx = /(\d+)(\d{3})/;
-			while (rgx.test(x1)) {
-				x1 = x1.replace(rgx, '$1' + ',' + '$2');
-			}
-			return x1 + x2;
-		}
+    <button title="Reveals all hidden data due to COVID-19 numbers being too low for the comparison to be useful."
+        class="button" id="showAllData">Show
+        all data</button>
+    <button title="Set chart view back to what it was when the page loaded." class="button" id="resetView">Reset
+        view</button>
 
-		window.chartColors = {
-			red: 'rgb(255, 99, 132)',
-			orange: 'rgb(255, 159, 64)',
-			yellow: 'rgb(255, 205, 86)',
-			green: 'rgb(75, 192, 192)',
-			blue: 'rgb(54, 162, 235)',
-			purple: 'rgb(153, 102, 255)',
-			grey: 'rgb(201, 203, 207)'
-		};
+    <script>
+        function addCommas(nStr) {
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
 
-		var color = Chart.helpers.color;
-		var horizontalBarChartData = {
-			labels: ['Cardiovascular diseases', 'Cancers', 'Respiratory diseases', 'Lower respiratory infections', 'Dementia', 'Digestive diseases', 'Neonatal disorders', 'Diarrheal diseases', 'Diabetes', 'Liver diseases', 'Road injuries', 'Kidney disease', 'Tuberculosis', 'HIV/AIDS', 'Suicide', 'Malaria', 'Homicide', 'Parkinson disease', 'Drowning', 'Meningitis', 'Nutritional deficiencies', 'Protein-energy malnutrition', 'Maternal disorders', 'Alcohol use disorders', 'Drug use disorders', 'Conflict', 'Hepatitis', 'Fire', 'Poisonings', 'Heat (hot and cold exposure)', 'Terrorism', 'Natural disasters'],
-			datasets: [{
-				label: 'Annual deaths by cause',
-				backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-				backgroundColor: window.chartColors.blue,
-				borderWidth: 1,
-				data: [
-					17790000,
-					9560000,
-					3910000,
-					2560000,
-					2510000,
-					2380000,
-					1780000,
-					1570000,
-					1370000,
-					1320000,
-					1240000,
-					1230000,
-					1180000,
-					954492,
-					793823,
-					619827,
-					405346,
-					340639,
-					295210,
-					288021,
-					269997,
-					231771,
-					193639,
-					184934,
-					166613,
-					129720,
-					126391,
-					120632,
-					72371,
-					53350,
-					26445,
-					9603
-				]
-			}, {
-				label: 'Deaths by Coronavirus',
-				backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
-				backgroundColor: window.chartColors.red,
-				data: [
-					14706
-				]
-			}]
+        window.chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(201, 203, 207)'
+        };
 
-		};
+        //---------------------------------------------------------
+        // Set up vars and arrays.
+        //---------------------------------------------------------
+        const COVID19 = 14765; // COVID-19 death total.
+        const COVID19_Multiple = COVID19 * 10; // Upper bound of chart data to include.
+        var annualDeaths = { 'Cardiovascular diseases': 17790000, 'Cancers': 9560000, 'Respiratory diseases': 3910000, 'Lower respiratory infections': 2560000, 'Dementia': 2510000, 'Digestive diseases': 2380000, 'Neonatal disorders': 1780000, 'Diarrheal diseases': 1570000, 'Diabetes': 1370000, 'Liver diseases': 1320000, 'Road injuries': 1240000, 'Kidney disease': 1230000, 'Tuberculosis': 1180000, 'HIV/AIDS': 954492, 'Suicide': 793823, 'Malaria': 619827, 'Homicide': 405346, 'Parkinson disease': 340639, 'Drowning': 295210, 'Meningitis': 288021, 'Nutritional deficiencies': 269997, 'Protein-energy malnutrition': 231771, 'Maternal disorders': 193639, 'Alcohol use disorders': 184934, 'Drug use disorders': 166613, 'Conflict': 129720, 'Hepatitis': 126391, 'Fire': 120632, 'Poisonings': 72371, 'Heat (hot and cold exposure)': 53350, 'Terrorism': 26445, 'Natural disasters': 9603 }; // Key/Val pairs of deaths and causes.
+        var labels = []; // Placeholder array for labels.
+        var data = []; // Placeholder array for data.
 
-		window.onload = function () {
-			var ctx = document.getElementById('canvas').getContext('2d');
-			window.myHorizontalBar = new Chart(ctx, {
-				type: 'horizontalBar',
-				data: horizontalBarChartData,
-				options: {
-					// Elements options apply to all of the options unless overridden in a dataset
-					// In this case, we are setting the border of each horizontal bar to be 2px wide
-					elements: {
-						rectangle: {
-							borderWidth: 2,
-						}
-					},
-					responsive: true,
-					legend: {
-						position: 'right',
-					},
-					title: {
-						display: true,
-						text: 'Annual deaths by cause vs COVID-19 deaths'
-					}
-				}
-			});
+        // Assign values to labels and data arrays.
+        for (let [key, value] of Object.entries(annualDeaths)) {
+            if (value <= COVID19_Multiple) {
+                labels.push(key);
+                data.push(value);
+            }
+        }
 
-		};
-	</script>
+        //---------------------------------------------------------
+        // Chart config.
+        //---------------------------------------------------------
+        var color = Chart.helpers.color;
+        var horizontalBarChartData = {
+            labels: labels,
+            datasets: [{
+                label: 'Annual deaths by cause',
+                backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+                backgroundColor: window.chartColors.blue,
+                borderWidth: 1,
+                data: data
+            }, {
+                label: 'Deaths by Coronavirus',
+                backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+                backgroundColor: window.chartColors.red,
+                data: [
+                    COVID19
+                ]
+            }]
+
+        };
+
+        //---------------------------------------------------------
+        // Load chart on page load.
+        //---------------------------------------------------------
+
+        window.onload = function () {
+            var ctx = document.getElementById('canvas').getContext('2d');
+            window.myHorizontalBar = new Chart(ctx, {
+                type: 'horizontalBar',
+                data: horizontalBarChartData,
+                options: {
+                    // Elements options apply to all of the options unless overridden in a dataset
+                    // In this case, we are setting the border of each horizontal bar to be 2px wide
+                    elements: {
+                        rectangle: {
+                            borderWidth: 2,
+                        }
+                    },
+                    responsive: true,
+                    legend: {
+                        position: 'right',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Annual deaths by cause vs COVID-19 deaths'
+                    }
+                }
+            });
+
+        };
+
+        //---------------------------------------------------------
+        // Button JavaScript.
+        //---------------------------------------------------------
+
+        document.getElementById('showAllData').addEventListener('click', function () {
+
+            // Reset arrays to empty so they can be populated again in an ordered fashion.
+            labels.length = 0;
+            data.length = 0;
+
+            // Assign values to labels and data arrays.
+            for (let [key, value] of Object.entries(annualDeaths)) {
+                labels.push(key);
+                data.push(value);
+            }
+
+            window.myHorizontalBar.update();
+        });
+
+        document.getElementById('resetView').addEventListener('click', function () {
+
+            // Reset arrays to empty so they can be populated again in an ordered fashion.
+            labels.length = 0;
+            data.length = 0;
+
+            // Assign values to labels and data arrays.
+            for (let [key, value] of Object.entries(annualDeaths)) {
+                if (value <= COVID19_Multiple) {
+                    labels.push(key);
+                    data.push(value);
+                }
+            }
+
+            window.myHorizontalBar.update();
+        });
+
+    </script>
 </body>
 
 </html>
