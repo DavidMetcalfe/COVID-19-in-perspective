@@ -119,6 +119,7 @@
 
         };
 
+        
         //---------------------------------------------------------
         // Load chart on page load.
         //---------------------------------------------------------
@@ -165,6 +166,9 @@
                 data.push(value);
             }
 
+            horizontalBarChartData['datasets'][0]['label'] = "Annual deaths by cause";
+            window.myHorizontalBar.data = horizontalBarChartData;
+           
             window.myHorizontalBar.update();
         });
 
@@ -179,8 +183,12 @@
                 labels.push(key);
                 data.push(value);
             }
-
+            
+            horizontalBarChartData['datasets'][0]['label'] = "Deaths by pandemic";
+            window.myHorizontalBar.data = horizontalBarChartData;
+           
             window.myHorizontalBar.update();
+            
         });
 
         document.getElementById('resetView').addEventListener('click', function () {
@@ -196,7 +204,10 @@
                     data.push(value);
                 }
             }
-
+            horizontalBarChartData['datasets'][0]['label'] = "Annual deaths by cause";
+            window.myHorizontalBar.data = horizontalBarChartData;
+            
+           
             window.myHorizontalBar.update();
         });
 
