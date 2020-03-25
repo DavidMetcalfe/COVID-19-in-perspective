@@ -86,20 +86,28 @@
         //---------------------------------------------------------
         const COVID19 = 18923; // COVID-19 death total.
         const COVID19_Multiple = COVID19 * 10; // Upper bound of chart data to include.
-        const annualDeaths = { 'Cardiovascular diseases': 17790000, 'Cancers': 9560000, 'Respiratory diseases': 3910000, 'Lower respiratory infections': 2560000, 'Dementia': 2510000, 'Digestive diseases': 2380000, 'Neonatal disorders': 1780000, 'Diarrheal diseases': 1570000, 'Diabetes': 1370000, 'Liver diseases': 1320000, 'Road injuries': 1240000, 'Kidney disease': 1230000, 'Tuberculosis': 1180000, 'HIV/AIDS': 954492, 'Suicide': 793823, 'Malaria': 619827, 'Homicide': 405346, 'Parkinson disease': 340639, 'Drowning': 295210, 'Meningitis': 288021, 'Nutritional deficiencies': 269997, 'Protein-energy malnutrition': 231771, 'Maternal disorders': 193639, 'Alcohol use disorders': 184934, 'Drug use disorders': 166613, 'Conflict': 129720, 'Hepatitis': 126391, 'Fire': 120632, 'Poisonings': 72371, 'Heat (hot and cold exposure)': 53350, 'Terrorism': 26445, 'Natural disasters': 9603 }; // Key/Val pairs of deaths and causes.
-        const pandemicDeaths = { "Black Death (Bubonic Plague)": 200000000, "Smallpox": 57000000, "Spanish Flu": 40000000, "Plague of Justinian": 30000000, "HIV/AIDS": 25000000, "The Third Plague": 12000000, "Antonine Plague": 5000000, "17th Century Great Plagues": 3000000, "Asian Flu": 1100000, "Russian Flu": 1000000, "Hong Kong Flu": 1000000, "Cholera": 1000000, "18th Century Great Plagues": 600000, "Swine Flu": 200000, "Yellow Fever": 150000, "Ebola": 11300, "MERS": 850, "SARS": 770 }; // Historical pandemics and their death tolls.        
+        const annualDeaths = { 'Cardiovascular diseases': 17790000, 'Cancers': 9560000, 'Respiratory diseases': 3910000, 'Lower respiratory infections': 2560000, 'Dementia': 2510000, 'Digestive diseases': 2380000, 'Neonatal disorders': 1780000, 'Diarrheal diseases': 1570000, 'Diabetes': 1370000, 'Liver diseases': 1320000, 'Road injuries': 1240000, 'Kidney disease': 1230000, 'Tuberculosis': 1180000, 'HIV/AIDS': 954492, 'Suicide': 793823, 'Malaria': 619827, 'Homicide': 405346, 'Parkinson disease': 340639, 'Drowning': 295210, 'Meningitis': 288021, 'Nutritional deficiencies': 269997, 'Protein-energy malnutrition': 231771, 'Maternal disorders': 193639, 'Alcohol use disorders': 184934, 'Drug use disorders': 166613, 'Conflict': 129720, 'Hepatitis': 126391, 'Fire': 120632, 'Poisonings': 72371, 'Heat (hot and cold exposure)': 53350, 'Terrorism': 26445, 'COVID-19': COVID19, 'Natural disasters': 9603 }; // Key/Val pairs of deaths and causes.
+        const pandemicDeaths = { "Black Death (Bubonic Plague)": 200000000, "Smallpox": 57000000, "Spanish Flu": 40000000, "Plague of Justinian": 30000000, "HIV/AIDS": 25000000, "The Third Plague": 12000000, "Antonine Plague": 5000000, "17th Century Great Plagues": 3000000, "Asian Flu": 1100000, "Russian Flu": 1000000, "Hong Kong Flu": 1000000, "Cholera": 1000000, "18th Century Great Plagues": 600000, "Swine Flu": 200000, "Yellow Fever": 150000, 'COVID-19': COVID19, "Ebola": 11300, "MERS": 850, "SARS": 770 }; // Historical pandemics and their death tolls.        
         var defaultLabel = "2017 deaths by cause";
         var pandemicLabel = "Deaths by pandemic";
         var labels = []; // Placeholder array for labels.
         var data = []; // Placeholder array for data.
+        var backgroundColors = []; // Placeholder array for styles.
 
         // Assign values to labels and data arrays.
         for (let [key, value] of Object.entries(annualDeaths)) {
             if (value <= COVID19_Multiple) {
                 labels.push(key);
                 data.push(value);
+                if (key === "COVID-19") {
+                    backgroundColors.push(window.chartColors.red);
+                }
+                else {
+                    backgroundColors.push(window.chartColors.blue);
+                }
             }
-        }
+
+        };
 
         //---------------------------------------------------------
         // Chart config.
@@ -110,16 +118,9 @@
             datasets: [{
                 label: defaultLabel,
                 backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-                backgroundColor: window.chartColors.blue,
+                backgroundColor: backgroundColors,
                 borderWidth: 1,
                 data: data
-            }, {
-                label: 'Deaths by Coronavirus',
-                backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
-                backgroundColor: window.chartColors.red,
-                data: [
-                    COVID19
-                ]
             }]
 
         };
@@ -164,11 +165,18 @@
             // Reset arrays to empty so they can be populated again in an ordered fashion.
             labels.length = 0;
             data.length = 0;
+            backgroundColors.length = 0;
 
             // Assign values to labels and data arrays.
             for (let [key, value] of Object.entries(annualDeaths)) {
                 labels.push(key);
                 data.push(value);
+                if (key === "COVID-19") {
+                    backgroundColors.push(window.chartColors.red);
+                }
+                else {
+                    backgroundColors.push(window.chartColors.blue);
+                }
             }
 
             horizontalBarChartData['datasets'][0]['label'] = defaultLabel;
@@ -183,12 +191,19 @@
             // Reset arrays to empty so they can be populated again in an ordered fashion.
             labels.length = 0;
             data.length = 0;
+            backgroundColors.length = 0;
 
             // Assign values to labels and data arrays.
             for (let [key, value] of Object.entries(pandemicDeaths)) {
                 if (value <= COVID19_Multiple) {
                     labels.push(key);
                     data.push(value);
+                    if (key === "COVID-19") {
+                        backgroundColors.push(window.chartColors.red);
+                    }
+                    else {
+                        backgroundColors.push(window.chartColors.blue);
+                    }
                 }
             }
 
@@ -205,11 +220,18 @@
             // Reset arrays to empty so they can be populated again in an ordered fashion.
             labels.length = 0;
             data.length = 0;
+            backgroundColors.length = 0;
 
             // Assign values to labels and data arrays.
             for (let [key, value] of Object.entries(pandemicDeaths)) {
                 labels.push(key);
                 data.push(value);
+                if (key === "COVID-19") {
+                    backgroundColors.push(window.chartColors.red);
+                }
+                else {
+                    backgroundColors.push(window.chartColors.blue);
+                }
             }
 
             horizontalBarChartData['datasets'][0]['label'] = pandemicLabel;
@@ -225,12 +247,19 @@
             // Reset arrays to empty so they can be populated again in an ordered fashion.
             labels.length = 0;
             data.length = 0;
+            backgroundColors.length = 0;
 
             // Assign values to labels and data arrays.
             for (let [key, value] of Object.entries(annualDeaths)) {
                 if (value <= COVID19_Multiple) {
                     labels.push(key);
                     data.push(value);
+                    if (key === "COVID-19") {
+                        backgroundColors.push(window.chartColors.red);
+                    }
+                    else {
+                        backgroundColors.push(window.chartColors.blue);
+                    }
                 }
             }
             horizontalBarChartData['datasets'][0]['label'] = defaultLabel;
