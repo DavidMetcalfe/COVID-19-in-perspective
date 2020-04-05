@@ -12,6 +12,7 @@ Growing weary of the constant panic around COVID-19, I decided to pull some numb
 - [Our World In Data](https://ourworldindata.org/causes-of-death)
 - [Novel Coronavirus (COVID-19) Cases, provided by JHU CSSE](https://github.com/CSSEGISandData/COVID-19)
 - [Visualizing the History of Pandemics](https://www.visualcapitalist.com/history-of-pandemics-deadliest/)
+- [Disease Burden of Influenza | CDC](https://www.cdc.gov/flu/about/burden/index.html)
 
 ## Contributions
 
