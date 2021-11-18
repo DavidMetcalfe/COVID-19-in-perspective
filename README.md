@@ -1,6 +1,6 @@
 # COVID-19 in perspective
 
-The intention here is to inspire more cool-headedness and rational discourse by getting people to keep this virus in perspective when compared with other ailments throughout history. Yes this virus is dangerous, but it is not the endtimes.
+The intention here is to inspire more cool-headedness and rational discourse by getting people to keep this virus in perspective when compared with other ailments throughout history. Yes this virus is dangerous, but it is not the end times.
 
 ## Check it out
 
