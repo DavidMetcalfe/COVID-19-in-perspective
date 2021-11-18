@@ -1,6 +1,6 @@
 # COVID-19 in perspective
 
-Growing weary of the constant panic around COVID-19, I decided to pull some numbers surrounding annual deaths by cause and compare them to the current death total for COVID-19. If I'm lucky, this will inspire a bit more cool-headedness and get people to keep this virus in perspective when compared with ailments of far greater severity.
+The intention here is to inspire more cool-headedness and rational discourse by getting people to keep this virus in perspective when compared with other ailments throughout history. Yes this virus is dangerous, but it is not the endtimes.
 
 ## Check it out
 
