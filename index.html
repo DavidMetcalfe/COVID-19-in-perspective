@@ -42,22 +42,22 @@
 
 <body>
     <div id="container">
+
+        <button title="Reveals all hidden data due to COVID-19 numbers being too low for the comparison to be useful."
+            class="button" id="showAllData">Show
+            all data</button>
+        <button title="Compare COVID-19 with other pandemics, limited to 10x current COVID-19." class="button"
+            id="pandemicsOnly">Pandemics only</button>
+        <button title="Compare COVID-19 with all other pandemics." class="button" id="allPandemics">Show all
+            pandemics</button>
+        <button title="Set chart view back to what it was when the page loaded." class="button" id="resetView">Reset
+            view</button>
+        <a href="https://github.com/DavidMetcalfe/COVID-19-in-perspective" target="_blank"><button class="button">Take me to
+                Github</button></a>
+
         <canvas id="canvas"></canvas>
-    </div>
-
-    <button title="Reveals all hidden data due to COVID-19 numbers being too low for the comparison to be useful."
-        class="button" id="showAllData">Show
-        all data</button>
-    <button title="Compare COVID-19 with other pandemics, limited to 10x current COVID-19." class="button"
-        id="pandemicsOnly">Pandemics only</button>
-    <button title="Compare COVID-19 with all other pandemics." class="button" id="allPandemics">Show all
-        pandemics</button>
-    <button title="Set chart view back to what it was when the page loaded." class="button" id="resetView">Reset
-        view</button>
-    <a href="https://github.com/DavidMetcalfe/COVID-19-in-perspective" target="_self"><button class="button">Take me to
-            Github</button></a>
-
-
+    
+        </div>
     <script>
         function addCommas(nStr) {
             nStr += '';
@@ -85,7 +85,8 @@
         // Set up vars and arrays.
         //---------------------------------------------------------
         const COVID19 = 5128843; // COVID-19 death total.
-        const COVID19_Multiple = COVID19 * 10; // Upper bound of chart data to include.
+        const COVID19_Multiple_Pos = COVID19 * 10; // Upper bound of chart data to include.
+        const COVID19_Multiple_Neg = COVID19 / 10; // Upper bound of chart data to include.
         annualDeathLabels = ['Cardiovascular diseases', 'Cancers', 'Respiratory diseases', 'Lower respiratory infections', 'Dementia', 'Digestive diseases', 'Neonatal disorders', 'Diarrheal diseases', 'Diabetes', 'Liver diseases', 'Road injuries', 'Kidney disease', 'Tuberculosis', 'HIV/AIDS', 'Suicide', 'Malaria', 'Homicide', 'Parkinson disease', 'Drowning', 'Meningitis', 'Nutritional deficiencies', 'Protein-energy malnutrition', 'Maternal disorders', 'Alcohol use disorders', 'Drug use disorders', 'Conflict', 'Hepatitis', 'Fire', 'Poisonings', 'Heat (hot and cold exposure)', 'Terrorism', 'Natural disasters', 'COVID-19']; // Annual death labels.
         annualDeathValues = [17790000, 9560000, 3910000, 2560000, 2510000, 2380000, 1780000, 1570000, 1370000, 1320000, 1240000, 1230000, 1180000, 954492, 793823, 619827, 405346, 340639, 295210, 288021, 269997, 231771, 193639, 184934, 166613, 129720, 126391, 120632, 72371, 53350, 26445, 9603, COVID19]; // Annual death values.
         pandemicLabels = ["Black Death (Bubonic Plague)", "Smallpox", "Spanish Flu", "Plague of Justinian", "HIV/AIDS", "The Third Plague", "Antonine Plague", "17th Century Great Plagues", "Asian Flu", "Russian Flu", "Hong Kong Flu", "Cholera", "18th Century Great Plagues", "Influenza (Annual)", "Swine Flu", "Yellow Fever", "Ebola", "MERS", "SARS", 'COVID-19'];
@@ -119,7 +120,7 @@
             if (multipleBool === true) {
                 // Store labels/data, configure red/blue colours.
                 sortedArrayOfObj.forEach(function (d) {
-                    if (d.data <= COVID19_Multiple) {
+                    if (d.data <= COVID19_Multiple_Pos && d.data >= COVID19_Multiple_Neg) {
                         if (d.label === "COVID-19") {
                             backgroundColors.push(window.chartColors.red);
                         }
@@ -190,7 +191,8 @@
                     },
                     title: {
                         display: true,
-                        text: '2017 deaths by cause (limited to 10x current COVID-19 toll) vs COVID-19 deaths'
+                        fontSize: 14,
+                        text: '2017 deaths by cause (limited to 10x +/- current COVID-19 toll) vs COVID-19 deaths'
                     }
                 }
             });
@@ -218,7 +220,7 @@
 
             horizontalBarChartData['datasets'][0]['label'] = pandemicLabel;
             window.myHorizontalBar.data = horizontalBarChartData;
-            window.myHorizontalBar.options.title.text = "Historical pandemic deaths (limited to 10x current COVID-19 toll) vs COVID-19 deaths";
+            window.myHorizontalBar.options.title.text = "Historical pandemic deaths (limited to 10x +/- current COVID-19 toll) vs COVID-19 deaths";
 
             window.myHorizontalBar.update();
 
@@ -242,7 +244,7 @@
 
             horizontalBarChartData['datasets'][0]['label'] = defaultLabel;
             window.myHorizontalBar.data = horizontalBarChartData;
-            window.myHorizontalBar.options.title.text = '2017 deaths by cause (limited to 10x current COVID-19 toll) vs COVID-19 deaths';
+            window.myHorizontalBar.options.title.text = '2017 deaths by cause (limited to 10x +/- current COVID-19 toll) vs COVID-19 deaths';
 
             window.myHorizontalBar.update();
         });
