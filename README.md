@@ -13,6 +13,7 @@ The intention here is to inspire more cool-headedness and rational discourse by 
 - [Novel Coronavirus (COVID-19) Cases, provided by JHU CSSE](https://github.com/CSSEGISandData/COVID-19)
 - [Visualizing the History of Pandemics](https://www.visualcapitalist.com/history-of-pandemics-deadliest/)
 - [WHO Global Influenze Strategy 2019-2030](https://www.who.int/influenza/Global_Influenza_Strategy_2019_2030_Summary_English.pdf?ua=1)
+- [WHO Coronavirus (COVID-19) Dashboard](https://covid19.who.int/?mapFilter=deaths)
 
 ## Contributions
 
